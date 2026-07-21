@@ -1,49 +1,46 @@
 let ganancia = 0;
+let historial = [];
 
-let historial = JSON.parse(localStorage.getItem("historial")) || [];
+function registrar(tipo, monto){
 
-function agregar(tipo, dinero){
+    ganancia += monto;
 
-    ganancia += dinero;
-
-    document.getElementById("ganancia").innerHTML="$"+ganancia.toFixed(2);
+    document.getElementById("ganancia").textContent =
+        "$" + ganancia.toFixed(2);
 
     const ahora = new Date();
 
-    const hora = ahora.toLocaleTimeString([],{
-        hour:'2-digit',
-        minute:'2-digit'
+    const hora = ahora.toLocaleTimeString("es-ES",{
+        hour:"2-digit",
+        minute:"2-digit"
     });
 
     historial.unshift({
-        tipo:tipo,
-        dinero:dinero,
-        hora:hora
+        tipo,
+        monto,
+        hora
     });
 
-    localStorage.setItem("historial",JSON.stringify(historial));
+    actualizarHistorial();
 
-    mostrarHistorial();
 }
 
-function mostrarHistorial(){
+function actualizarHistorial(){
 
-    let lista="";
+    const lista = document.getElementById("historial");
+
+    lista.innerHTML = "";
 
     historial.forEach(item=>{
 
-        lista+=`
-        <div class="resumen">
-        <b>${item.tipo.toUpperCase()}</b><br>
-        Hora: ${item.hora}<br>
-        Ganancia: $${item.dinero.toFixed(2)}
+        lista.innerHTML += `
+        <div class="registro">
+            <h3>${item.tipo}</h3>
+            <p>Ganancia: $${item.monto.toFixed(2)}</p>
+            <p>Hora: ${item.hora}</p>
         </div>
         `;
 
     });
 
-    document.getElementById("historial").innerHTML=lista;
-
 }
-
-mostrarHistorial();
