@@ -5,72 +5,39 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sebas CarWash</title>
 
-<style>
-body{
-    margin:0;
-    background:#111;
-    color:white;
-    font-family:Arial,sans-serif;
-}
-
-header{
-    background:#c40000;
-    padding:20px;
-    text-align:center;
-}
-
-header h1{
-    margin:0;
-}
-
-main{
-    padding:20px;
-}
-
-button{
-    width:100%;
-    padding:18px;
-    margin:10px 0;
-    font-size:20px;
-    border:none;
-    border-radius:12px;
-    background:#e00000;
-    color:white;
-}
-
-.resumen{
-    background:#222;
-    padding:15px;
-    border-radius:12px;
-    margin-bottom:20px;
-}
-</style>
+<link rel="stylesheet" href="style.css">
 
 </head>
 
 <body>
 
 <header>
-<h1>🚘 Sebas CarWash</h1>
-<p>Control de ganancias</p>
+    <h1>🚘 Sebas CarWash</h1>
+    <p>Sebas Ditillo</p>
 </header>
 
 <main>
 
 <div class="resumen">
-<h2>💰 Ganancia de hoy</h2>
-<h1>$0.00</h1>
+    <h2>💰 Ganancia de hoy</h2>
+    <h1 id="ganancia">$0.00</h1>
 </div>
 
-<button>🏍️ Moto Normal</button>
+<button onclick="agregar('moto',1.20)">🏍️ Moto Normal</button>
 
-<button>✨ Moto con Cera</button>
+<button onclick="agregar('cera',2.00)">✨ Moto con Cera</button>
 
-<button>🚗 Carro</button>
+<button onclick="agregar('carro',2.80)">🚗 Carro</button>
 
-<button>🚙 Camioneta</button>
+<button onclick="agregar('camioneta',6.00)">🚙 Camioneta</button>
+
+<h2>📋 Historial</h2>
+
+<div id="historial"></div>
 
 </main>
+
+<script src="script.js"></script>
 
 </body>
 </html>
