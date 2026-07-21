@@ -1,86 +1,75 @@
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,Helvetica,sans-serif;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
 }
 
 body{
-background:#111827;
-color:white;
+    background:#111827;
+    color:white;
 }
 
-header{
-background:linear-gradient(135deg,#dc2626,#991b1b);
-padding:30px;
-text-align:center;
-border-bottom-left-radius:25px;
-border-bottom-right-radius:25px;
-box-shadow:0 5px 20px rgba(0,0,0,.3);
+.header{
+    background:#dc2626;
+    text-align:center;
+    padding:25px;
+    border-bottom-left-radius:20px;
+    border-bottom-right-radius:20px;
 }
 
-header h1{
-font-size:30px;
+.header h1{
+    font-size:30px;
 }
 
-header p{
-margin-top:8px;
-color:#f3f3f3;
+.header p{
+    margin-top:8px;
 }
 
 main{
-padding:20px;
-}
-
-.resumen{
-background:#1f2937;
-border-radius:20px;
-padding:20px;
-margin-bottom:20px;
-text-align:center;
-box-shadow:0 5px 15px rgba(0,0,0,.25);
-}
-
-.resumen h1{
-font-size:40px;
-margin-top:10px;
-color:#22c55e;
-}
-
-button{
-width:100%;
-padding:18px;
-margin-top:15px;
-font-size:20px;
-font-weight:bold;
-border:none;
-border-radius:15px;
-cursor:pointer;
-background:#dc2626;
-color:white;
-transition:.2s;
-}
-
-button:hover{
-transform:scale(1.02);
-background:#ef4444;
-}
-
-#historial{
-margin-top:20px;
+    padding:20px;
 }
 
 .card{
-background:#1f2937;
-padding:15px;
-border-radius:15px;
-margin-bottom:10px;
-border-left:5px solid #22c55e;
+    background:#1f2937;
+    border-radius:15px;
+    padding:20px;
+    text-align:center;
+    margin-bottom:20px;
 }
 
-footer{
-margin-top:40px;
-text-align:center;
-color:#999;
-font-size:13px;
+.card h1{
+    color:#22c55e;
+    font-size:40px;
+}
+
+.botones{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+button{
+    background:#dc2626;
+    color:white;
+    border:none;
+    border-radius:12px;
+    padding:18px;
+    font-size:18px;
+    font-weight:bold;
+}
+
+button:active{
+    transform:scale(0.98);
+}
+
+#historial{
+    margin-top:20px;
+}
+
+.registro{
+    background:#1f2937;
+    padding:15px;
+    margin-top:10px;
+    border-radius:10px;
 }
