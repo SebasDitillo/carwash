@@ -6,49 +6,35 @@
 <title>Sebas CarWash</title>
 <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<header>
+<header class="header">
     <h1>🚗 Sebas CarWash</h1>
     <p>Bienvenido, Sebas Ditillo</p>
 </header>
 
 <main>
 
-<div class="resumen">
-<h2>💰 Ganancia de hoy</h2>
-<h1 id="ganancia">$0.00</h1>
+<div class="card">
+    <h2>💰 Ganancia de Hoy</h2>
+    <h1 id="ganancia">$0.00</h1>
 </div>
 
-<button onclick="agregar('🏍️ Moto Normal',1.20)">🏍️ Moto Normal</button>
+<div class="botones">
+    <button onclick="registrar('Moto Normal',1.20)">🏍️ Moto Normal</button>
 
-<button onclick="agregar('✨ Moto con Cera',2.00)">✨ Moto con Cera</button>
+    <button onclick="registrar('Moto con Cera',2.00)">✨ Moto con Cera</button>
 
-<button onclick="agregar('🚗 Carro',2.80)">🚗 Carro</button>
+    <button onclick="registrar('Carro',2.80)">🚗 Carro</button>
 
-<button onclick="agregar('🚙 Camioneta',6.00)">🚙 Camioneta</button>
-
-<h2 style="margin-top:30px;">📋 Historial</h2>
-<div class="resumen">
-<h2>📊 Estadísticas</h2>
-
-<p>🏍️ Motos: <span id="motos">0</span></p>
-
-<p>🚗 Carros: <span id="carros">0</span></p>
-
-<p>🚙 Camionetas: <span id="camionetas">0</span></p>
-
-<p>💵 Total ganado: <span id="total">$0.00</span></p>
-
+    <button onclick="registrar('Camioneta',6.00)">🚙 Camioneta</button>
 </div>
+
+<h2>📋 Historial</h2>
+
 <div id="historial"></div>
 
 </main>
-
-<footer>
-Sebas CarWash © 2026
-</footer>
 
 <script src="script.js"></script>
 
