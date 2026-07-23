@@ -3,32 +3,44 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sebas CarWash</title>
+<title>Sebas CarWash v2.0</title>
 <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <header class="header">
-    <h1>🚗 Sebas CarWash</h1>
-    <p>Bienvenido, Sebas Ditillo</p>
+    <h1>🚗 Sebas CarWash v2.0</h1>
+    <p>Propietario: Sebas Ditillo</p>
+    <p id="fecha"></p>
 </header>
 
 <main>
 
-<div class="card">
-    <h2>💰 Ganancia de Hoy</h2>
+<section class="card">
+    <h2>💰 Ganancia de hoy</h2>
     <h1 id="ganancia">$0.00</h1>
-</div>
+</section>
 
-<div class="botones">
-    <button onclick="registrar('Moto Normal',1.20)">🏍️ Moto Normal</button>
+<section class="botones">
 
-    <button onclick="registrar('Moto con Cera',2.00)">✨ Moto con Cera</button>
+<button onclick="registrar('Moto Normal',3,1.20)">
+🏍️ Moto Normal
+</button>
 
-    <button onclick="registrar('Carro',2.80)">🚗 Carro</button>
+<button onclick="registrar('Moto con Cera',5,2.00)">
+✨ Moto con Cera
+</button>
 
-    <button onclick="registrar('Camioneta',6.00)">🚙 Camioneta</button>
-</div>
+<button onclick="registrar('Carro',7,2.80)">
+🚗 Carro
+</button>
+
+<button onclick="registrar('Camioneta',15,6.00)">
+🚙 Camioneta
+</button>
+
+</section>
 
 <h2>📋 Historial</h2>
 
