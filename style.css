@@ -2,20 +2,20 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial, sans-serif;
+    font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
-    background:#111827;
+    background:#0f172a;
     color:white;
 }
 
 .header{
-    background:#dc2626;
+    background:linear-gradient(135deg,#dc2626,#7f1d1d);
+    padding:30px;
     text-align:center;
-    padding:25px;
-    border-bottom-left-radius:20px;
-    border-bottom-right-radius:20px;
+    border-bottom-left-radius:25px;
+    border-bottom-right-radius:25px;
 }
 
 .header h1{
@@ -23,7 +23,8 @@ body{
 }
 
 .header p{
-    margin-top:8px;
+    margin-top:6px;
+    opacity:.9;
 }
 
 main{
@@ -31,36 +32,41 @@ main{
 }
 
 .card{
-    background:#1f2937;
-    border-radius:15px;
+    background:#1e293b;
+    border-radius:20px;
     padding:20px;
     text-align:center;
     margin-bottom:20px;
 }
 
+.card h2{
+    color:#cbd5e1;
+}
+
 .card h1{
     color:#22c55e;
-    font-size:40px;
+    font-size:42px;
+    margin-top:10px;
 }
 
 .botones{
     display:flex;
     flex-direction:column;
-    gap:12px;
+    gap:15px;
 }
 
 button{
-    background:#dc2626;
-    color:white;
-    border:none;
-    border-radius:12px;
     padding:18px;
     font-size:18px;
+    border:none;
+    border-radius:15px;
+    background:#dc2626;
+    color:white;
     font-weight:bold;
 }
 
 button:active{
-    transform:scale(0.98);
+    transform:scale(.98);
 }
 
 #historial{
@@ -68,8 +74,9 @@ button:active{
 }
 
 .registro{
-    background:#1f2937;
+    background:#1e293b;
     padding:15px;
-    margin-top:10px;
-    border-radius:10px;
+    margin-bottom:10px;
+    border-radius:15px;
+    border-left:5px solid #22c55e;
 }
