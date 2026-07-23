@@ -1,5 +1,6 @@
 let total = 0;
-let historial = [];
+let historial = JSON.parse(localStorage.getItem("historial")) || [];
+let total = Number(localStorage.getItem("total")) || 0;
 
 const fecha = document.getElementById("fecha");
 
@@ -35,7 +36,8 @@ function registrar(nombre, precio, ganancia){
 
 }
 
-function mostrarHistorial(){
+function mostrarHistorial(){localStorage.setItem("historial", JSON.stringify(historial));
+localStorage.setItem("total", total);
 
     const lista = document.getElementById("historial");
 
@@ -53,5 +55,9 @@ function mostrarHistorial(){
         `;
 
     });
+document.getElementById("ganancia").textContent = "$" + total.toFixed(2);
 
+if (historial.length > 0) {
+    mostrarHistorial();
+}
 }
