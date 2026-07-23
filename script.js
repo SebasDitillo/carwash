@@ -1,42 +1,53 @@
-let ganancia = 0;
+let total = 0;
 let historial = [];
 
-function registrar(tipo, monto){
+const fecha = document.getElementById("fecha");
 
-    ganancia += monto;
+const hoy = new Date();
+
+fecha.textContent = hoy.toLocaleDateString("es-ES",{
+    weekday:"long",
+    day:"numeric",
+    month:"long",
+    year:"numeric"
+});
+
+function registrar(nombre, precio, ganancia){
+
+    total += ganancia;
 
     document.getElementById("ganancia").textContent =
-        "$" + ganancia.toFixed(2);
+    "$" + total.toFixed(2);
 
-    const ahora = new Date();
-
-    const hora = ahora.toLocaleTimeString("es-ES",{
+    const hora = new Date().toLocaleTimeString("es-ES",{
         hour:"2-digit",
         minute:"2-digit"
     });
 
     historial.unshift({
-        tipo,
-        monto,
+        nombre,
+        precio,
+        ganancia,
         hora
     });
 
-    actualizarHistorial();
+    mostrarHistorial();
 
 }
 
-function actualizarHistorial(){
+function mostrarHistorial(){
 
     const lista = document.getElementById("historial");
 
-    lista.innerHTML = "";
+    lista.innerHTML="";
 
     historial.forEach(item=>{
 
         lista.innerHTML += `
         <div class="registro">
-            <h3>${item.tipo}</h3>
-            <p>Ganancia: $${item.monto.toFixed(2)}</p>
+            <h3>${item.nombre}</h3>
+            <p>Precio del servicio: $${item.precio}</p>
+            <p>Mi ganancia: $${item.ganancia.toFixed(2)}</p>
             <p>Hora: ${item.hora}</p>
         </div>
         `;
