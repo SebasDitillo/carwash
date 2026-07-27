@@ -1,54 +1,68 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sebas CarWash v2.0</title>
+
+<title>Sebas CarWash v3.0</title>
+
 <link rel="stylesheet" href="style.css">
+
+<link rel="manifest" href="manifest.json">
+
+<meta name="theme-color" content="#b91c1c">
+
 </head>
 
 <body>
 
-<header class="header">
-    <h1>🚗 Sebas CarWash v2.0</h1>
-    <p>Propietario: Sebas Ditillo</p>
-    <p id="fecha"></p>
+<div class="app">
+
+<header class="topbar">
+
+<div class="logo">
+
+<h1>🚗 Sebas CarWash</h1>
+
+<p>Control Personal</p>
+
+</div>
+
+<div class="perfil">
+
+<div class="foto">
+
+👤
+
+</div>
+
+<div>
+
+<h3>Sebas Ditillo</h3>
+
+<span>Lavador de Vehículos</span>
+
+</div>
+
+</div>
+
 </header>
 
-<main>
+<section class="hero">
 
-<section class="card">
-    <h2>💰 Ganancia de hoy</h2>
-    <h1 id="ganancia">$0.00</h1>
-</section>
+<div class="hero-text">
 
-<section class="botones">
+<h2>Bienvenido</h2>
 
-<button onclick="registrar('Moto Normal',3,1.20)">
-🏍️ Moto Normal
-</button>
+<p>Controla tus ganancias diarias de forma rápida y sencilla.</p>
 
-<button onclick="registrar('Moto con Cera',5,2.00)">
-✨ Moto con Cera
-</button>
+</div>
 
-<button onclick="registrar('Carro',7,2.80)">
-🚗 Carro
-</button>
+<div class="hero-image">
 
-<button onclick="registrar('Camioneta',15,6.00)">
-🚙 Camioneta
-</button>
+<img src="images/portada.jpg" alt="Portada">
+
+</div>
 
 </section>
-
-<h2>📋 Historial</h2>
-
-<div id="historial"></div>
-
-</main>
-
-<script src="script.js"></script>
-
-</body>
-</html>
