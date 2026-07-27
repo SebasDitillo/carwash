@@ -40,3 +40,34 @@ function agregarHistorial(texto) {
 }
 
 actualizarPantalla();
+// ===============================
+// BOTONES DE REGISTRO
+// ===============================
+
+document.querySelector(".moto").addEventListener("click", () => {
+    motos++;
+    ganancia += 1.20;
+    agregarHistorial("🏍️ Moto Normal - Ganancia: $1.20");
+    actualizarPantalla();
+});
+
+document.querySelector(".cera").addEventListener("click", () => {
+    motos++;
+    ganancia += 2.00;
+    agregarHistorial("✨ Moto con Cera - Ganancia: $2.00");
+    actualizarPantalla();
+});
+
+document.querySelector(".carro").addEventListener("click", () => {
+    carros++;
+    ganancia += 2.80;
+    agregarHistorial("🚗 Carro - Ganancia: $2.80");
+    actualizarPantalla();
+});
+
+document.querySelector(".camioneta").addEventListener("click", () => {
+    camionetas++;
+    ganancia += 6.00;
+    agregarHistorial("🚙 Camioneta - Ganancia: $6.00");
+    actualizarPantalla();
+});
