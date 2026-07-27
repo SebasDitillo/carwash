@@ -71,3 +71,44 @@ document.querySelector(".camioneta").addEventListener("click", () => {
     agregarHistorial("🚙 Camioneta - Ganancia: $6.00");
     actualizarPantalla();
 });
+// ===============================
+// GUARDAR Y CARGAR DATOS
+// ===============================
+
+function guardarDatos() {
+    const datos = {
+        ganancia,
+        motos,
+        carros,
+        camionetas,
+        historial: historial.innerHTML
+    };
+
+    localStorage.setItem("sebasCarWash", JSON.stringify(datos));
+}
+
+function cargarDatos() {
+    const datos = JSON.parse(localStorage.getItem("sebasCarWash"));
+
+    if (!datos) return;
+
+    ganancia = datos.ganancia || 0;
+    motos = datos.motos || 0;
+    carros = datos.carros || 0;
+    camionetas = datos.camionetas || 0;
+
+    if (datos.historial) {
+        historial.innerHTML = datos.historial;
+    }
+
+    actualizarPantalla();
+}
+
+cargarDatos();
+
+// Guardar automáticamente después de cada registro
+const botones = document.querySelectorAll(".btn");
+
+botones.forEach(boton => {
+    boton.addEventListener("click", guardarDatos);
+});
