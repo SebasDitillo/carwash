@@ -80,3 +80,79 @@ body{
     border-radius:20px;
     display:block;
 }
+.dashboard{
+    padding:20px;
+}
+
+.card{
+    background:#1f2937;
+    border-radius:18px;
+    padding:18px;
+    margin-bottom:18px;
+    box-shadow:0 4px 12px rgba(0,0,0,.3);
+}
+
+.resumen{
+    background:linear-gradient(135deg,#dc2626,#991b1b);
+    text-align:center;
+}
+
+.resumen h1{
+    font-size:42px;
+    margin:12px 0;
+}
+
+.resumen-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+    margin-top:15px;
+    text-align:center;
+}
+
+.resumen-grid strong{
+    display:block;
+    font-size:28px;
+    color:#ef4444;
+}
+
+.acciones{
+    padding:20px;
+}
+
+.acciones h2{
+    margin-bottom:15px;
+}
+
+.btn{
+    width:100%;
+    border:none;
+    border-radius:14px;
+    padding:16px;
+    margin-bottom:12px;
+    font-size:17px;
+    font-weight:bold;
+    color:#fff;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.btn:hover{
+    transform:scale(1.02);
+}
+
+.moto{
+    background:#2563eb;
+}
+
+.cera{
+    background:#f59e0b;
+}
+
+.carro{
+    background:#10b981;
+}
+
+.camioneta{
+    background:#dc2626;
+}
