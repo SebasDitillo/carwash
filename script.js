@@ -1,63 +1,42 @@
-let total = 0;
-let historial = JSON.parse(localStorage.getItem("historial")) || [];
-let total = Number(localStorage.getItem("total")) || 0;
+// ===============================
+// SEBAS CARWASH V3.0
+// ===============================
 
-const fecha = document.getElementById("fecha");
+let ganancia = 0;
+let motos = 0;
+let carros = 0;
+let camionetas = 0;
 
-const hoy = new Date();
+const txtGanancia = document.getElementById("ganancia");
+const txtMotos = document.getElementById("motos");
+const txtCarros = document.getElementById("carros");
+const txtCamionetas = document.getElementById("camionetas");
 
-fecha.textContent = hoy.toLocaleDateString("es-ES",{
-    weekday:"long",
-    day:"numeric",
-    month:"long",
-    year:"numeric"
-});
+const historial = document.getElementById("historial");
 
-function registrar(nombre, precio, ganancia){
-
-    total += ganancia;
-
-    document.getElementById("ganancia").textContent =
-    "$" + total.toFixed(2);
-
-    const hora = new Date().toLocaleTimeString("es-ES",{
-        hour:"2-digit",
-        minute:"2-digit"
-    });
-
-    historial.unshift({
-        nombre,
-        precio,
-        ganancia,
-        hora
-    });
-
-    mostrarHistorial();
-
+function actualizarPantalla() {
+    txtGanancia.textContent = "$" + ganancia.toFixed(2);
+    txtMotos.textContent = motos;
+    txtCarros.textContent = carros;
+    txtCamionetas.textContent = camionetas;
 }
 
-function mostrarHistorial(){localStorage.setItem("historial", JSON.stringify(historial));
-localStorage.setItem("total", total);
+function agregarHistorial(texto) {
 
-    const lista = document.getElementById("historial");
+    if (historial.querySelector(".vacio")) {
+        historial.innerHTML = "";
+    }
 
-    lista.innerHTML="";
+    const item = document.createElement("div");
 
-    historial.forEach(item=>{
+    item.style.padding = "10px";
+    item.style.marginBottom = "10px";
+    item.style.background = "#374151";
+    item.style.borderRadius = "10px";
 
-        lista.innerHTML += `
-        <div class="registro">
-            <h3>${item.nombre}</h3>
-            <p>Precio del servicio: $${item.precio}</p>
-            <p>Mi ganancia: $${item.ganancia.toFixed(2)}</p>
-            <p>Hora: ${item.hora}</p>
-        </div>
-        `;
+    item.textContent = texto;
 
-    });
-document.getElementById("ganancia").textContent = "$" + total.toFixed(2);
-
-if (historial.length > 0) {
-    mostrarHistorial();
+    historial.prepend(item);
 }
-}
+
+actualizarPantalla();
