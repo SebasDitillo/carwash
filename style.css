@@ -10,8 +10,9 @@
 }
 
 body{
-    background:#0d1117;
+    background: url("fondo.jpg") center center / cover no-repeat fixed;
     color:#ffffff;
+}
 }
 
 .app{
