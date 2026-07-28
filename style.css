@@ -11,7 +11,8 @@
 
 body{
     background: url("fondo.jpg") center center / cover no-repeat fixed;
-    color:#ffffff;
+    background-color:#0d1117;
+    color:#fff;
 }
 }
 
