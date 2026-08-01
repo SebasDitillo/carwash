@@ -3,380 +3,320 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SEBA CarWash 4.0</title>
+<title>Sebastián CarWash</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --navy-950:#071019;
-    --navy-900:#0b1b2b;
-    --navy-800:#122840;
-    --navy-700:#1a3654;
-    --line:#22405f;
-    --ice:#eaf3fb;
-    --mist:#9fb6cc;
-    --aqua:#26c6da;
-    --blue:#2e9bf0;
-    --blue-dim:#1c6fb0;
-    --teal:#1fbf8f;
-    --amber:#f0a63a;
-    --coral:#f0665a;
-    --radius:12px;
+    --bg:#070b14; --panel:#0d1420; --panel2:#141d2e; --line:#22304a;
+    --ice:#f2f4f8; --mist:#8a97ad; --accent:#2f7bf0; --accent-dim:#1c5bc0;
+    --green:#2fbf71; --purple:#9a6ae0; --amber:#e0ac4f;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
-  body{
-    font-family:'Inter',sans-serif;
-    background: radial-gradient(1200px 700px at 85% -10%, #0d2740 0%, var(--navy-950) 55%);
-    color:var(--ice);
-    min-height:100vh;
-    display:flex;
-  }
-  h1,h2,h3,.brand{font-family:'Sora',sans-serif;}
-
-  /* ---------- Sidebar ---------- */
-  .sidebar{
-    width:230px; flex-shrink:0;
-    background:var(--navy-900);
-    border-right:1px solid var(--line);
-    display:flex; flex-direction:column;
-    padding:24px 16px;
-    position:sticky; top:0; height:100vh;
-  }
-  .brand{display:flex; align-items:center; gap:10px; margin-bottom:4px;}
-  .brand .drop{
-    width:34px; height:34px; border-radius:9px;
-    background:linear-gradient(135deg, var(--blue), var(--aqua));
-    display:flex; align-items:center; justify-content:center;
-    font-size:18px;
-  }
-  .brand .name{font-weight:700; font-size:16px; line-height:1.1;}
-  .brand .name span{display:block; font-size:10px; color:var(--aqua); font-weight:600; letter-spacing:.08em;}
-  .nav{margin-top:32px; display:flex; flex-direction:column; gap:4px;}
-  .nav button{
-    all:unset; cursor:pointer;
-    display:flex; align-items:center; gap:10px;
-    padding:10px 12px; border-radius:10px;
-    color:var(--mist); font-size:14px; font-weight:500;
-    transition:background .15s, color .15s;
-  }
-  .nav button:hover{background:var(--navy-800); color:var(--ice);}
-  .nav button.active{background:var(--navy-800); color:var(--ice); box-shadow:inset 3px 0 0 var(--aqua);}
-  .nav button .ico{width:18px; text-align:center; font-size:15px;}
-  .sidebar-foot{margin-top:auto; padding-top:16px; border-top:1px solid var(--line); font-size:11px; color:var(--mist);}
-
-  /* ---------- Main ---------- */
-  .main{flex:1; padding:28px 34px; max-width:1180px;}
-  .view{display:none;}
-  .view.active{display:block; animation:fade .25s ease;}
-  @keyframes fade{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:none;}}
-
-  .topbar{display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:26px;}
-  .topbar h1{font-size:22px; font-weight:700;}
-  .topbar .sub{color:var(--mist); font-size:13px; margin-top:4px;}
-  .date-pill{
-    background:var(--navy-800); border:1px solid var(--line); border-radius:999px;
-    padding:8px 14px; font-size:12px; color:var(--mist);
-  }
-
-  .grid{display:grid; gap:16px;}
-  .grid-4{grid-template-columns:repeat(4,1fr);}
-  .grid-2{grid-template-columns:1.4fr 1fr;}
-
-  .card{
-    background:var(--navy-900); border:1px solid var(--line); border-radius:var(--radius);
-    padding:18px 20px;
-  }
-  .stat-label{font-size:11.5px; color:var(--mist); text-transform:uppercase; letter-spacing:.06em; margin-bottom:8px;}
-  .stat-value{font-size:26px; font-weight:700; font-family:'Sora',sans-serif;}
-  .stat-value.aqua{color:var(--aqua);}
-  .stat-value.blue{color:var(--blue);}
-  .stat-value.teal{color:var(--teal);}
-  .stat-value.amber{color:var(--amber);}
-  .stat-note{font-size:11.5px; color:var(--mist); margin-top:6px;}
-
-  .section-title{font-size:14px; font-weight:600; margin-bottom:12px; display:flex; align-items:center; justify-content:space-between;}
-  .section-title .link{font-size:12px; color:var(--aqua); cursor:pointer; font-weight:500;}
-
-  table{width:100%; border-collapse:collapse; font-size:13px;}
-  th{text-align:left; color:var(--mist); font-weight:500; font-size:11.5px; text-transform:uppercase; letter-spacing:.04em; padding:8px 10px; border-bottom:1px solid var(--line);}
-  td{padding:10px 10px; border-bottom:1px solid var(--navy-800); vertical-align:middle;}
+  body{font-family:'Inter',sans-serif; background:var(--bg); color:var(--ice); min-height:100vh; padding-bottom:78px;}
+  h1,h2,h3{font-family:'Sora',sans-serif;}
+  .topbar{display:flex; align-items:center; justify-content:space-between; padding:16px 18px; border-bottom:1px solid var(--line);}
+  .topbar-left{display:flex; align-items:center; gap:12px;}
+  .menu-ico{width:22px; height:16px; display:flex; flex-direction:column; justify-content:space-between;}
+  .menu-ico span{display:block; height:2px; background:var(--mist); border-radius:2px;}
+  .who b{color:var(--accent); font-size:16px; font-family:'Sora',sans-serif;}
+  .who .role{font-size:11px; color:var(--mist);}
+  .topbar-right{display:flex; align-items:center; gap:14px;}
+  .bell{position:relative; width:34px; height:34px; border-radius:50%; background:var(--panel2); display:flex; align-items:center; justify-content:center;}
+  .bell .dot{position:absolute; top:-2px; right:-2px; background:var(--accent); color:#fff; font-size:9px; font-weight:700; width:16px; height:16px; border-radius:50%; display:flex; align-items:center; justify-content:center;}
+  .logo{width:38px; height:38px; border-radius:50%; background:radial-gradient(circle at 35% 30%, var(--accent-dim), #0d1420 70%); border:2px solid var(--accent); display:flex; align-items:center; justify-content:center;}
+  .main{padding:16px;}
+  .greet-row{display:flex; gap:10px; margin-bottom:14px;}
+  .card{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px 16px;}
+  .greet-card{flex:1.3; display:flex; align-items:center; gap:12px;}
+  .greet-card .avatar{width:38px; height:38px; border-radius:50%; background:var(--panel2); display:flex; align-items:center; justify-content:center;}
+  .greet-card b{font-size:14.5px; display:block;}
+  .greet-card span{font-size:11.5px; color:var(--mist);}
+  .date-card{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;}
+  .date-card b{font-size:12.5px;}
+  .date-card span{font-size:10.5px; color:var(--mist);}
+  .grid4{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;}
+  .stat-card{padding:14px;}
+  .stat-icon{width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center; margin-bottom:8px;}
+  .stat-icon svg{width:18px; height:18px;}
+  .stat-icon.blue{background:#12305c; color:var(--accent);}
+  .stat-icon.green{background:#123a2a; color:var(--green);}
+  .stat-icon.amber{background:#3a2a10; color:var(--amber);}
+  .stat-icon.purple{background:#2a1c4a; color:var(--purple);}
+  .stat-label{font-size:10px; color:var(--mist); text-transform:uppercase; letter-spacing:.04em; margin-bottom:4px;}
+  .stat-value{font-size:19px; font-weight:700; font-family:'Sora',sans-serif;}
+  .stat-link{font-size:10.5px; color:var(--accent); margin-top:3px;}
+  .section-title{font-size:13px; font-weight:600; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;}
+  .section-title .link{font-size:11.5px; color:var(--accent); cursor:pointer;}
+  table{width:100%; border-collapse:collapse; font-size:11.5px;}
+  th{text-align:left; color:var(--mist); font-weight:500; font-size:9.5px; text-transform:uppercase; padding:6px 4px; border-bottom:1px solid var(--line);}
+  td{padding:7px 4px; border-bottom:1px solid var(--panel2);}
   tr:last-child td{border-bottom:none;}
-  .tag{display:inline-block; padding:3px 9px; border-radius:999px; font-size:11px; font-weight:600;}
-  .tag.moto{background:#1a3654; color:#7fb8ea;}
-  .tag.carro{background:#173a33; color:#4fd1a5;}
-  .tag.camioneta{background:#3a2f16; color:#f0c14a;}
-  .tag.completo{background:#123a4a; color:var(--aqua);}
-  .row-actions{display:flex; gap:8px;}
-  .row-actions button{
-    all:unset; cursor:pointer; font-size:12px; color:var(--mist);
-    padding:4px 8px; border-radius:6px; border:1px solid var(--line);
-  }
-  .row-actions button:hover{color:var(--ice); border-color:var(--aqua);}
-  .row-actions button.danger:hover{color:var(--coral); border-color:var(--coral);}
-
-  /* ---------- Forms ---------- */
-  label{display:block; font-size:11.5px; color:var(--mist); margin-bottom:6px; text-transform:uppercase; letter-spacing:.04em;}
-  input, select{
-    width:100%; background:var(--navy-800); border:1px solid var(--line); color:var(--ice);
-    padding:10px 12px; border-radius:9px; font-size:14px; font-family:'Inter',sans-serif;
-  }
-  input:focus, select:focus{outline:none; border-color:var(--aqua);}
-  .field{margin-bottom:14px;}
-  .field-row{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
-  .field-row3{display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;}
-
-  .service-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:18px;}
-  .service-opt{
-    border:1px solid var(--line); border-radius:10px; padding:12px 14px;
-    display:flex; justify-content:space-between; align-items:center; cursor:pointer;
-    transition:border-color .15s, background .15s;
-  }
-  .service-opt:hover{border-color:var(--blue-dim);}
-  .service-opt.selected{border-color:var(--aqua); background:#0f2b3d;}
-  .service-opt .sname{font-size:13.5px; font-weight:500;}
-  .service-opt .sprice{font-size:13.5px; font-weight:700; color:var(--aqua);}
-
-  .photo-box{
-    border:1.5px dashed var(--line); border-radius:10px; padding:20px;
-    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
-    color:var(--mist); font-size:12.5px; margin-bottom:18px; cursor:pointer;
-    text-align:center;
-  }
-  .photo-box.has-photo{border-style:solid; border-color:var(--aqua); color:var(--ice);}
-  .photo-box img{max-height:70px; border-radius:6px;}
-
-  .summary-box{display:flex; gap:12px; margin-bottom:18px;}
-  .summary-box .card{flex:1; text-align:left;}
-
-  .btn{
-    all:unset; cursor:pointer; text-align:center; font-weight:600; font-size:14px;
-    padding:12px 18px; border-radius:10px; font-family:'Inter',sans-serif;
-  }
-  .btn-primary{background:linear-gradient(135deg, var(--blue), var(--aqua)); color:#04141f;}
-  .btn-primary:hover{filter:brightness(1.08);}
-  .btn-ghost{border:1px solid var(--line); color:var(--mist);}
-  .btn-ghost:hover{color:var(--ice); border-color:var(--mist);}
+  .tag{display:inline-block; padding:2px 7px; border-radius:999px; font-size:9.5px; font-weight:600;}
+  .tag.terminado{background:#123a2a; color:var(--green);}
+  .tag.proceso{background:#3a2f16; color:var(--amber);}
+  .tag.pendiente{background:#3a1f1f; color:#e0736a;}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px; margin-bottom:14px;}
+  .resumen-row{display:flex; justify-content:space-between; font-size:12px; padding:5px 0; color:var(--mist);}
+  .resumen-row b{color:var(--ice);}
+  .bcv-card{display:flex; flex-direction:column; align-items:center; text-align:center; justify-content:center;}
+  .bcv-card .rate{font-size:17px; font-weight:700; color:var(--accent); font-family:'Sora',sans-serif; margin-top:4px;}
+  .bottom-nav{position:fixed; bottom:0; left:0; right:0; background:var(--panel); border-top:1px solid var(--line); display:flex; z-index:40;}
+  .bottom-nav button{all:unset; flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; padding:9px 0; color:var(--mist); font-size:10px; cursor:pointer;}
+  .bottom-nav button svg{width:18px; height:18px;}
+  .bottom-nav button.active{color:var(--accent);}
+  .fab-bar{position:fixed; bottom:56px; left:0; right:0; padding:0 16px; z-index:39;}
+  .fab{all:unset; display:block; width:100%; text-align:center; background:var(--accent); color:#04070d; font-weight:700; font-size:13.5px; padding:13px; border-radius:12px; cursor:pointer; box-shadow:0 6px 18px rgba(0,0,0,.4);}
+  .view{display:none;} .view.active{display:block;}
+  label{display:block; font-size:10.5px; color:var(--mist); margin-bottom:5px; text-transform:uppercase;}
+  input, select{width:100%; background:var(--panel2); border:1px solid var(--line); color:var(--ice); padding:10px 11px; border-radius:9px; font-size:13.5px; font-family:'Inter',sans-serif; margin-bottom:12px;}
+  input:focus, select:focus{outline:none; border-color:var(--accent);}
   .btn-row{display:flex; gap:10px;}
-  .btn-row .btn-ghost{flex:1;} .btn-row .btn-primary{flex:2;}
-
-  .search-bar{display:flex; gap:10px; margin-bottom:16px;}
-  .search-bar input{flex:1;}
-
-  .empty{text-align:center; padding:40px 0; color:var(--mist); font-size:13px;}
-  .toast{
-    position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px);
-    background:var(--navy-800); border:1px solid var(--aqua); color:var(--ice);
-    padding:12px 20px; border-radius:10px; font-size:13px; opacity:0;
-    transition:opacity .25s, transform .25s; pointer-events:none; z-index:50;
-  }
+  .btn{all:unset; cursor:pointer; text-align:center; font-weight:600; font-size:13px; padding:11px 16px; border-radius:9px; flex:1;}
+  .btn-primary{background:var(--accent); color:#04070d;}
+  .btn-ghost{border:1px solid var(--line); color:var(--mist);}
+  .empty{text-align:center; padding:26px 0; color:var(--mist); font-size:12px;}
+  .toast{position:fixed; bottom:130px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--panel2); border:1px solid var(--accent); color:var(--ice); padding:10px 16px; border-radius:9px; font-size:12.5px; opacity:0; transition:opacity .25s, transform .25s; pointer-events:none; z-index:80;}
   .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
-
-  .split-pill{display:flex; align-items:center; gap:8px; background:var(--navy-800); border:1px solid var(--line); border-radius:999px; padding:6px 6px 6px 14px; font-size:12px;}
-  .split-pill b{color:var(--aqua);}
-  .chart-wrap{position:relative; height:220px;}
-
-  .modal-bg{position:fixed; inset:0; background:rgba(4,10,17,.6); display:none; align-items:center; justify-content:center; z-index:60;}
-  .modal-bg.show{display:flex;}
-  .modal{background:var(--navy-900); border:1px solid var(--line); border-radius:14px; padding:22px; width:360px;}
-  .modal h3{font-size:15px; margin-bottom:14px;}
+  @media (min-width:520px){ .main{max-width:480px; margin:0 auto;} .fab-bar{max-width:480px; margin:0 auto; left:0; right:0;} }
 </style>
 </head>
 <body>
 
-<div class="sidebar">
-  <div class="brand">
-    <div class="drop">🚿</div>
-    <div class="name">Seba CarWash<span>CONTROL Y GANANCIAS</span></div>
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="menu-ico"><span></span><span></span><span></span></div>
+    <div class="who"><b>Sebastián CarWash</b><div class="role">Empleado</div></div>
   </div>
-  <nav class="nav">
-    <button class="active" data-view="inicio"><span class="ico">⌂</span> Inicio</button>
-    <button data-view="nuevo"><span class="ico">＋</span> Nuevo lavado</button>
-    <button data-view="historial"><span class="ico">☰</span> Historial</button>
-    <button data-view="reportes"><span class="ico">▤</span> Reportes</button>
-    <button data-view="pago"><span class="ico">$</span> Pago móvil</button>
-  </nav>
-  <div class="sidebar-foot">Comisión configurada: <b style="color:var(--ice)">40%</b>, dividida entre 2 trabajadores.</div>
+  <div class="topbar-right">
+    <div class="bell"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg><div class="dot" id="notif-count">0</div></div>
+    <div class="logo"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13l2-6h14l2 6"/><rect x="3" y="13" width="18" height="6" rx="2"/><circle cx="7.5" cy="19" r="1.5"/><circle cx="16.5" cy="19" r="1.5"/></svg></div>
+  </div>
 </div>
 
 <div class="main">
 
   <!-- INICIO -->
   <section class="view active" id="view-inicio">
-    <div class="topbar">
-      <div>
-        <h1>Hola, Sebastián</h1>
-        <div class="sub">Resumen de hoy</div>
-      </div>
-      <div class="date-pill" id="today-pill"></div>
+    <div class="greet-row">
+      <div class="card greet-card"><div class="avatar"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></div><div><b>¡Hola, Sebastián!</b><span>¡Buen trabajo hoy!</span></div></div>
+      <div class="card date-card"><b id="fecha-hoy"></b><span id="dia-hoy"></span></div>
     </div>
 
-    <div class="grid grid-4" style="margin-bottom:18px;">
-      <div class="card">
-        <div class="stat-label">Total vendido hoy</div>
-        <div class="stat-value aqua" id="stat-total">$0.00</div>
-      </div>
-      <div class="card">
-        <div class="stat-label">Comisión (40%)</div>
-        <div class="stat-value blue" id="stat-comision">$0.00</div>
-      </div>
-      <div class="card">
-        <div class="stat-label">Por trabajador (÷2)</div>
-        <div class="stat-value teal" id="stat-porpersona">$0.00</div>
-      </div>
-      <div class="card">
-        <div class="stat-label">Servicios hoy</div>
-        <div class="stat-value amber" id="stat-servicios">0</div>
-      </div>
+    <div class="grid4">
+      <div class="card stat-card"><div class="stat-icon blue"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13l2-6h14l2 6"/><rect x="3" y="13" width="18" height="6" rx="2"/><circle cx="7.5" cy="19" r="1.5"/><circle cx="16.5" cy="19" r="1.5"/></svg></div><div class="stat-label">Servicios hoy</div><div class="stat-value" id="st-servicios">0</div><div class="stat-link" data-view="servicios">Ver detalles</div></div>
+      <div class="card stat-card"><div class="stat-icon green"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 15c0 1.1 1.3 2 3 2s3-.9 3-2-1.3-1.7-3-2-3-.9-3-2 1.3-2 3-2 3 .9 3 2"/></svg></div><div class="stat-label">Comisión hoy</div><div class="stat-value" id="st-comision">$0.00</div><div class="stat-link" style="color:var(--green);">40% de tus servicios</div></div>
+      <div class="card stat-card"><div class="stat-icon amber"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div><div class="stat-label">Tiempo trabajado</div><div class="stat-value" id="st-tiempo" style="font-size:16px;">0h 0m</div><div class="stat-link" id="turno-toggle" style="color:var(--amber); cursor:pointer;">Iniciar turno</div></div>
+      <div class="card stat-card"><div class="stat-icon purple"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10"/><path d="M12 20V4"/><path d="M20 20v-7"/></svg></div><div class="stat-label">Ventas generadas</div><div class="stat-value" id="st-ventas" style="font-size:16px;">$0.00</div><div class="stat-link" style="color:var(--purple);">Total del día</div></div>
     </div>
 
-    <div class="grid grid-2">
-      <div class="card">
-        <div class="section-title">Últimos lavados <span class="link" data-view="historial">Ver historial →</span></div>
-        <table id="recent-table"><thead><tr><th>Cliente</th><th>Placa</th><th>Servicio</th><th>Precio</th><th>Comisión</th></tr></thead><tbody></tbody></table>
-      </div>
-      <div class="card">
-        <div class="section-title">Servicios de hoy por tipo</div>
-        <div class="chart-wrap"><canvas id="chart-today"></canvas></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- NUEVO LAVADO -->
-  <section class="view" id="view-nuevo">
-    <div class="topbar">
-      <div>
-        <h1>Nuevo lavado</h1>
-        <div class="sub">Registra cliente, vehículo y servicio</div>
-      </div>
-    </div>
-
-    <div class="grid grid-2">
-      <div class="card">
-        <div class="section-title">Datos del cliente</div>
-        <div class="field"><label>Nombre del cliente</label><input id="f-nombre" placeholder="Juan Pérez"></div>
-        <div class="field-row">
-          <div class="field"><label>Cédula</label><input id="f-cedula" placeholder="12.345.678"></div>
-          <div class="field"><label>Teléfono</label><input id="f-telefono" placeholder="0412-1234567"></div>
-        </div>
-
-        <div class="section-title" style="margin-top:8px;">Vehículo</div>
-        <div class="field"><label>Placa</label><input id="f-placa" placeholder="AB123CD" style="text-transform:uppercase;"></div>
-        <div class="photo-box" id="photo-box" onclick="document.getElementById('f-foto').click()">
-          <input type="file" accept="image/*" id="f-foto" style="display:none">
-          <span id="photo-label">📷 Tomar / adjuntar foto de la placa</span>
-        </div>
-
-        <div class="section-title">Tipo de servicio</div>
-        <div class="service-grid" id="service-grid"></div>
-
-        <div class="summary-box">
-          <div class="card">
-            <div class="stat-label">Precio del servicio</div>
-            <div class="stat-value blue" id="f-precio">$0.00</div>
-          </div>
-          <div class="card">
-            <div class="stat-label">Comisión total (40%)</div>
-            <div class="stat-value aqua" id="f-comision">$0.00</div>
-          </div>
-        </div>
-
-        <div class="btn-row">
-          <button class="btn btn-ghost" onclick="resetForm()">Cancelar registro</button>
-          <button class="btn btn-primary" onclick="guardarLavado()">Guardar lavado</button>
-        </div>
-      </div>
-
-      <div class="card" style="height:fit-content;">
-        <div class="section-title">Precios de referencia</div>
-        <table>
-          <tbody id="price-ref"></tbody>
-        </table>
-        <div class="section-title" style="margin-top:18px;">Cómo se reparte</div>
-        <p style="font-size:12.5px; color:var(--mist); line-height:1.6;">
-          El 40% del precio del servicio se calcula automáticamente como comisión. Ese monto se divide entre los 2 trabajadores del taller — puedes ajustar esta lógica en cuanto confirmes el reparto exacto con la cajera.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- HISTORIAL -->
-  <section class="view" id="view-historial">
-    <div class="topbar">
-      <div>
-        <h1>Historial de lavados</h1>
-        <div class="sub">Busca, edita o elimina un registro</div>
-      </div>
-    </div>
     <div class="card">
-      <div class="search-bar">
-        <input id="search-input" placeholder="Buscar por placa o nombre del cliente…" oninput="renderHistorial()">
+      <div class="section-title">Mis últimos servicios <span class="link" data-view="servicios">Ver todos →</span></div>
+      <table><thead><tr><th>Hora</th><th>Cliente</th><th>Servicio</th><th>USD</th><th>Estado</th></tr></thead><tbody id="tabla-recientes"></tbody></table>
+      <div class="empty" id="empty-recientes" style="display:none;">Aún no tienes servicios hoy.</div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="section-title">Resumen del día</div>
+        <div class="resumen-row"><span>Total en USD</span><b id="r-usd">$0.00</b></div>
+        <div class="resumen-row"><span>Total en Bs. (BCV)</span><b id="r-bs">Bs. 0</b></div>
+        <div class="resumen-row"><span>Comisión (40%)</span><b id="r-com-usd">$0.00</b></div>
+        <div class="resumen-row"><span>Comisión en Bs.</span><b id="r-com-bs">Bs. 0</b></div>
       </div>
-      <table>
-        <thead><tr><th>#</th><th>Fecha</th><th>Cliente</th><th>Placa</th><th>Servicio</th><th>Precio</th><th>Comisión</th><th></th></tr></thead>
-        <tbody id="historial-table"></tbody>
-      </table>
-      <div class="empty" id="historial-empty" style="display:none;">Aún no hay lavados registrados.</div>
+      <div class="card bcv-card">
+        <div class="stat-icon blue" style="margin:0 auto 6px;"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 7h13l-4-4"/><path d="M17 17H4l4 4"/></svg></div>
+        <div class="stat-label">Tasa BCV del día</div>
+        <div class="rate" id="r-tasa">1 USD = -- Bs</div> 
+<div style="font-size:10px; color:var(--mist); margin-top:6px;" id="r-tasa-fecha">Sin actualizar</div>
+      </div>
     </div>
   </section>
 
-  <!-- REPORTES -->
+  <!-- MIS SERVICIOS -->
+  <section class="view" id="view-servicios">
+    <div class="section-title" style="margin:6px 0 14px;"><h1 style="font-size:16px;">Mis servicios</h1></div>
+    <div class="card">
+      <table><thead><tr><th>Fecha</th><th>Cliente</th><th>Placa</th><th>Servicio</th><th>USD</th><th>Estado</th></tr></thead><tbody id="tabla-todos"></tbody></table>
+      <div class="empty" id="empty-todos" style="display:none;">Aún no has registrado servicios.</div>
+    </div>
+  </section>
+
+  <!-- MIS REPORTES -->
   <section class="view" id="view-reportes">
-    <div class="topbar">
-      <div>
-        <h1>Reportes y estadísticas</h1>
-        <div class="sub">Resumen semanal por trabajador</div>
-      </div>
-    </div>
-    <div class="grid grid-2" style="margin-bottom:16px;">
-      <div class="card">
-        <div class="section-title">Ventas últimos 7 días</div>
-        <div class="chart-wrap"><canvas id="chart-week"></canvas></div>
-      </div>
-      <div class="card">
-        <div class="section-title">Servicios por tipo (histórico)</div>
-        <div class="chart-wrap"><canvas id="chart-types"></canvas></div>
-      </div>
-    </div>
+    <div class="section-title" style="margin:6px 0 14px;"><h1 style="font-size:16px;">Mis reportes</h1></div>
     <div class="card">
-      <div class="section-title">
-        Reporte semanal
-        <div style="display:flex; gap:8px;">
-          <button class="btn btn-primary" style="padding:8px 14px; font-size:13px; background:linear-gradient(135deg,#2e9bf0,#1c6fb0);" onclick="generatePDF()">📄 Generar PDF</button>
-          <button class="btn btn-primary" style="padding:8px 14px; font-size:13px; background:linear-gradient(135deg,#1fbf8f,#17a374);" onclick="shareWhatsApp()">📲 Compartir por WhatsApp</button>
-        </div>
-      </div>
-      <table>
-        <thead><tr><th>Servicio</th><th>Cantidad</th><th>Total vendido</th><th>Comisión (40%)</th><th>Por trabajador</th></tr></thead>
-        <tbody id="report-table"></tbody>
-      </table>
+      <div class="resumen-row"><span>Comisión de hoy</span><b id="rep-hoy">$0.00</b></div>
+      <div class="resumen-row"><span>Comisión de la semana</span><b id="rep-semana">$0.00</b></div>
+      <div class="resumen-row"><span>Comisión del mes</span><b id="rep-mes">$0.00</b></div>
     </div>
   </section>
 
-  <!-- PAGO MOVIL -->
-  <section class="view" id="view-pago">
-    <div class="topbar">
-      <div>
-        <h1>Pago móvil y datos de cobro</h1>
-        <div class="sub">Comparte esto con tus clientes o con la jefa para que paguen rápido</div>
+  <!-- PERFIL -->
+  <section class="view" id="view-perfil">
+    <div class="section-title" style="margin:6px 0 14px;"><h1 style="font-size:16px;">Perfil</h1></div>
+    <div class="card" style="text-align:center;">
+      <div class="logo" style="width:64px; height:64px; margin:0 auto 10px;"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+      <b style="font-size:15px;">Sebastián</b>
+      <div style="font-size:12px; color:var(--mist); margin-top:2px;">Empleado — Multiservicios Di Tillo, C.A.</div>
+    </div>
+  </section>
+
+  <!-- NUEVO SERVICIO -->
+  <section class="view" id="view-nuevo">
+    <div class="section-title" style="margin:6px 0 14px;"><h1 style="font-size:16px;">Registrar servicio</h1></div>
+    <div class="card">
+      <label>Cliente</label><input id="f-cliente" placeholder="Nombre del cliente">
+      <label>Placa</label><input id="f-placa" placeholder="AB123CD" style="text-transform:uppercase;">
+      <label>Tipo de servicio</label>
+      <select id="f-servicio">
+        <option value="Moto normal|3">Moto normal — $3</option>
+        <option value="Moto con cera|5">Moto con cera — $5</option>
+        <option value="Carro|7">Carro — $7</option>
+        <option value="Camioneta|15">Camioneta — $15</option>
+        <option value="Lavado completo|25">Lavado completo — $25</option>
+      </select>
+      <label>Estado</label>
+      <select id="f-estado"><option>Pendiente</option><option>En proceso</option><option>Terminado</option></select>
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="showView('inicio')">Cancelar</button>
+        <button class="btn btn-primary" onclick="guardarServicio()">Guardar</button>
       </div>
     </div>
+  </section>
 
-    <div class="grid grid-2">
-      <div class="card">
-        <div class="section-title">Datos de la cuenta</div>
-        <table>
-          <tbody>
-            <tr><td style="color:var(--mist);">Banco</td><td style="text-align:right;">0105 - Banco Mercantil, C.A.</td></tr>
-            <tr><td style="color:var(--mist);">Titular</td><td style="text-align:right;">Sebastián Ditillo</td></tr>
-            <tr><td style="color:var(--mist);">Cédula</td><td style="text-align:right;">V-32.697.978</td></tr>
-            <tr><td style="color:var(--mist);">Teléfono</td><td style="text-align:right;">0424-236.49.61</td></tr>
-          </tbody>
-        </table>
-        <button class="btn btn-ghost" style="width:100%; margin-top:14px;" onclick="copyPagoMovil()">📋 Copiar datos</button>
-      </div>
+</div>
 
-      <div class="card" style="display:flex; flex-direction:column; align-items:center; text-align:center;">
-        <div class="section-title" style="width:100%;">Código QR</div>
-        <img src="data:image/jpeg;base64,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
+<div class="fab-bar" id="fab-bar"><button class="fab" onclick="showView('nuevo')">+ Registrar Nuevo Servicio</button></div>
+
+<div class="bottom-nav">
+  <button class="active" data-view="inicio"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg><span>Inicio</span></button>
+  <button data-view="servicios"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13l2-6h14l2 6"/><rect x="3" y="13" width="18" height="6" rx="2"/><circle cx="7.5" cy="19" r="1.5"/><circle cx="16.5" cy="19" r="1.5"/></svg><span>Mis Servicios</span></button>
+  <button data-view="reportes"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10"/><path d="M12 20V4"/><path d="M20 20v-7"/></svg><span>Mis Reportes</span></button>
+  <button data-view="perfil"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span>Perfil</span></button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const STORAGE_KEY = 'emp_sebastian';
+const TURNO_KEY = 'emp_sebastian_turno';
+const COMISION_PORC = 0.4;
+
+function loadArr(key){ try{ const v=JSON.parse(localStorage.getItem(key)||'[]'); return Array.isArray(v)?v:[]; }catch(e){ return []; } }
+function saveArr(key,val){ localStorage.setItem(key, JSON.stringify(val)); }
+let servicios = loadArr(STORAGE_KEY);
+let tasaBCV = JSON.parse(localStorage.getItem('dt_tasa') || 'null') || {valor:0, fecha:null};
+let turno = JSON.parse(localStorage.getItem(TURNO_KEY) || 'null');
+
+function money(n){ return '$' + (n||0).toLocaleString('en-US',{minimumFractionDigits:2, maximumFractionDigits:2}); }
+function bs(n){ return 'Bs. ' + Math.round((n||0)*(tasaBCV.valor||0)).toLocaleString('es-VE'); }
+function isToday(iso){ const d=new Date(iso), n=new Date(); return d.toDateString()===n.toDateString(); }
+function isThisWeek(iso){ const d=new Date(iso), n=new Date(); const start=new Date(n); start.setDate(n.getDate()-n.getDay()); start.setHours(0,0,0,0); return d>=start; }
+function isThisMonth(iso){ const d=new Date(iso), n=new Date(); return d.getMonth()===n.getMonth() && d.getFullYear()===n.getFullYear(); }
+function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2200); }
+function estClass(e){ return e==='Terminado' ? 'terminado' : (e==='En proceso' ? 'proceso' : 'pendiente'); }
+
+document.querySelectorAll('[data-view]').forEach(el=>{
+  el.addEventListener('click', ()=>showView(el.dataset.view));
+});
+function showView(name){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  document.querySelectorAll('.bottom-nav button[data-view]').forEach(b=>b.classList.toggle('active', b.dataset.view===name));
+  document.getElementById('fab-bar').style.display = (name==='nuevo') ? 'none' : 'block';
+  if(name==='servicios') renderTodos();
+  if(name==='reportes') renderReportes();
+}
+
+function guardarServicio(){
+  const cliente = document.getElementById('f-cliente').value.trim();
+  const placa = document.getElementById('f-placa').value.trim().toUpperCase();
+  if(!cliente || !placa){ toast('Falta cliente o placa'); return; }
+  const [nombre, precio] = document.getElementById('f-servicio').value.split('|');
+  const reg = {
+    id: Date.now(), fecha: new Date().toISOString(),
+    cliente, placa, servicio: nombre, precioUSD: +precio,
+    tasaUsada: tasaBCV.valor, estado: document.getElementById('f-estado').value,
+  };
+  servicios.unshift(reg); saveArr(STORAGE_KEY, servicios);
+  toast('Servicio guardado');
+  document.getElementById('f-cliente').value=''; document.getElementById('f-placa').value='';
+  document.getElementById('f-servicio').selectedIndex=0; document.getElementById('f-estado').selectedIndex=0;
+  renderInicio(); showView('inicio');
+}
+
+function renderInicio(){
+  const hoy = servicios.filter(s=>isToday(s.fecha));
+  const totalUSD = hoy.reduce((a,s)=>a+s.precioUSD,0);
+  const comUSD = totalUSD * COMISION_PORC;
+  document.getElementById('st-servicios').textContent = hoy.length;
+  document.getElementById('st-comision').textContent = money(comUSD);
+  document.getElementById('st-ventas').textContent = money(totalUSD);
+  document.getElementById('r-usd').textContent = money(totalUSD);
+  document.getElementById('r-bs').textContent = bs(totalUSD);
+  document.getElementById('r-com-usd').textContent = money(comUSD);
+  document.getElementById('r-com-bs').textContent = bs(comUSD);
+  document.getElementById('r-tasa').textContent = '1 USD = ' + (tasaBCV.valor ? tasaBCV.valor.toLocaleString('es-VE') : '--') + ' Bs';
+  document.getElementById('r-tasa-fecha').textContent = tasaBCV.fecha ? 'Actualizado: ' + new Date(tasaBCV.fecha).toLocaleDateString('es-VE') : 'Sin actualizar';
+
+  const tb = document.getElementById('tabla-recientes');
+  document.getElementById('empty-recientes').style.display = hoy.length ? 'none' : 'block';
+  tb.innerHTML = hoy.slice(0,5).map(s=>`<tr>
+    <td>${new Date(s.fecha).toLocaleTimeString('es-VE',{hour:'2-digit',minute:'2-digit'})}</td>
+    <td>${s.cliente}</td><td>${s.servicio}</td><td>${money(s.precioUSD)}</td>
+    <td><span class="tag ${estClass(s.estado)}">${s.estado}</span></td>
+  </tr>`).join('');
+
+  const fecha = new Date();
+  document.getElementById('fecha-hoy').textContent = fecha.toLocaleDateString('es-VE',{day:'2-digit',month:'2-digit',year:'numeric'});
+  document.getElementById('dia-hoy').textContent = fecha.toLocaleDateString('es-VE',{weekday:'long'});
+  renderTurno();
+}
+
+function renderTodos(){
+  const tb = document.getElementById('tabla-todos');
+  document.getElementById('empty-todos').style.display = servicios.length ? 'none' : 'block';
+  tb.innerHTML = servicios.map(s=>`<tr>
+    <td>${new Date(s.fecha).toLocaleDateString('es-VE',{day:'2-digit',month:'2-digit'})}</td>
+    <td>${s.cliente}</td><td>${s.placa}</td><td>${s.servicio}</td><td>${money(s.precioUSD)}</td>
+    <td><span class="tag ${estClass(s.estado)}">${s.estado}</span></td>
+  </tr>`).join('');
+}
+
+function renderReportes(){
+  const com = arr => arr.reduce((a,s)=>a+s.precioUSD,0) * COMISION_PORC;
+  document.getElementById('rep-hoy').textContent = money(com(servicios.filter(s=>isToday(s.fecha))));
+  document.getElementById('rep-semana').textContent = money(com(servicios.filter(s=>isThisWeek(s.fecha))));
+  document.getElementById('rep-mes').textContent = money(com(servicios.filter(s=>isThisMonth(s.fecha))));
+}
+
+function renderTurno(){
+  const btn = document.getElementById('turno-toggle');
+  if(turno && turno.activo){
+    const mins = Math.floor((Date.now() - new Date(turno.inicio).getTime())/60000);
+    document.getElementById('st-tiempo').textContent = Math.floor(mins/60)+'h '+(mins%60)+'m';
+    btn.textContent = 'Terminar turno';
+  } else {
+    document.getElementById('st-tiempo').textContent = turno && turno.totalMin ? Math.floor(turno.totalMin/60)+'h '+(turno.totalMin%60)+'m' : '0h 0m';
+    btn.textContent = 'Iniciar turno';
+  }
+}
+document.getElementById('turno-toggle').addEventListener('click', ()=>{
+  if(turno && turno.activo){
+    const mins = Math.floor((Date.now() - new Date(turno.inicio).getTime())/60000);
+    turno = {activo:false, totalMin:(turno.totalMin||0)+mins};
+    toast('Turno terminado');
+  } else {
+    turno = {activo:true, inicio:new Date().toISOString(), totalMin:(turno&&turno.totalMin)||0};
+    toast('Turno iniciado');
+  }
+  localStorage.setItem(TURNO_KEY, JSON.stringify(turno));
+  renderTurno();
+});
+setInterval(()=>{ if(turno && turno.activo) renderTurno(); }, 30000);
+
+renderInicio();
+</script>
+</body>
+</html>
