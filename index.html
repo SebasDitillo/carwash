@@ -1,1 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cortes · Clips con IA</title>
+<style>
+:root{--bg:#eef1f4;--panel:#fff;--ink:#14213d;--mute:#5d6b82;--line:#d5dce6;--hot:#e4005a;--hot-ink:#fff;--ok:#0f7a4a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Avenir Next","Segoe UI",system-ui,sans-serif;display:grid;grid-template-columns:210px 1fr;min-height:100vh}
+nav{background:var(--ink);color:#dfe6f2;padding:20px 12px;display:flex;flex-direction:column;gap:4px}
+nav h1{font:700 22px/1 "Avenir Next Condensed","Arial Narrow",sans-serif;letter-spacing:.02em;margin:0 8px 20px;color:#fff}
+nav h1 i{color:var(--hot);font-style:normal}
+nav button{all:unset;cursor:pointer;padding:9px 10px;border-radius:6px;font-size:15px}
+nav button:hover{background:#22325a}
+nav button[aria-current=page]{background:var(--hot);color:var(--hot-ink)}
+nav button:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #7aa7ff;outline-offset:2px}
+main{padding:28px clamp(16px,4vw,48px);max-width:1100px}
+h2{font-size:26px;margin:0 0 4px}
+.sub{color:var(--mute);margin:0 0 20px;max-width:62ch}
+section[hidden]{display:none}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:end}
+label{display:grid;gap:4px;font-size:14px;color:var(--mute)}
+input[type=url],select{font:inherit;padding:9px 10px;border:1px solid var(--line);border-radius:6px;color:var(--ink);background:#fff}
+input[type=url]{min-width:min(100%,360px);flex:1}
+.go{font:inherit;font-weight:600;padding:10px 18px;border:0;border-radius:6px;background:var(--hot);color:var(--hot-ink);cursor:pointer}
+.go.stop{background:var(--ink)}
+.go:disabled{opacity:.5;cursor:not-allowed}
+.ck{display:flex;gap:8px;align-items:flex-start;margin-top:12px;font-size:14px;color:var(--ink)}
+.msg{margin:12px 0 0;font-size:14px;min-height:20px;color:var(--mute)}
+.msg.err{color:var(--hot)}
+.tl{position:relative;height:34px;margin:18px 0 6px;background:repeating-linear-gradient(90deg,#e3e8ef 0 2px,transparent 2px 24px),#f4f6f9;border-radius:6px;overflow:hidden}
+.tl b{position:absolute;top:0;bottom:0;background:var(--hot);opacity:.85;border-radius:3px}
+.tlcap{font-size:13px;color:var(--mute);margin:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin-top:18px}
+.clip{background:var(--panel);border:1px solid var(--line);border-radius:8px;overflow:hidden;display:flex;flex-direction:column}
+.thumb{aspect-ratio:9/16;display:flex;align-items:flex-end;padding:10px;color:#fff;font-weight:700;font-size:14px;line-height:1.2;text-shadow:0 1px 3px #0008}
+.meta{padding:8px 10px;font-size:13px;color:var(--mute);display:grid;gap:6px}
+.bar{height:5px;background:#e3e8ef;border-radius:3px}.bar i{display:block;height:100%;background:var(--ok);border-radius:3px}
+.meta button{font:inherit;font-size:13px;padding:5px;border:1px solid var(--line);border-radius:5px;background:#fff;color:var(--mute);cursor:not-allowed}
+.empty{margin-top:18px;color:var(--mute)}
+.net{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.net .box{display:grid;gap:10px}
+.net button{font:inherit;padding:8px;border-radius:6px;border:1px solid var(--ink);background:#fff;color:var(--ink);cursor:pointer}
+.net button.on{background:var(--ok);border-color:var(--ok);color:#fff}
+.note{font-size:13px;color:var(--mute);margin-top:24px;border-top:1px solid var(--line);padding-top:12px}
+@media(max-width:720px){body{grid-template-columns:1fr}nav{flex-direction:row;flex-wrap:wrap;padding:10px}nav h1{width:100%;margin:0 4px 4px}}
+@media(prefers-reduced-motion:no-preference){.clip{animation:in .35s ease-out}@keyframes in{from{opacity:0;transform:translateY(8px)}}}
+</style>
+</head>
+<body>
+<nav aria-label="Secciones">
+<h1>Cor<i>t</i>es</h1>
+<button data-v="live" aria-current="page">Crear desde LIVE</button>
+<button data-v="video">Crear desde video</button>
+<button data-v="reels">Mis reels</button>
+<button data-v="redes">Mis redes</button>
+<button data-v="stats">Estadísticas</button>
+<button data-v="config">Configuración</button>
+</nav>
+<main>
 
+<section id="v-live">
+<h2>Crear desde LIVE</h2>
+<p class="sub">Pega el enlace de una transmisión. Los clips aparecen por tandas de 10 mientras el directo sigue en curso.</p>
+<div class="box" data-mode="live"></div>
+</section>
+
+<section id="v-video" hidden>
+<h2>Crear desde video</h2>
+<p class="sub">Pega el enlace de un video largo y recibe unos 10 reels verticales.</p>
+<div class="box" data-mode="video"></div>
+</section>
+
+<section id="v-reels" hidden>
+<h2>Mis reels</h2>
+<p class="sub">Todos los clips generados.</p>
+<div class="grid" id="g-reels"></div>
+<p class="empty" id="e-reels">Aún no hay clips. Empieza desde LIVE o desde un video.</p>
+</section>
+
+<section id="v-redes" hidden>
+<h2>Mis redes</h2>
+<p class="sub">Conecta las cuentas donde quieres publicar. Facebook e Instagram requieren cuentas de Página y profesionales.</p>
+<div class="net" id="net"></div>
+</section>
+
+<section id="v-stats" hidden>
+<h2>Estadísticas</h2>
+<p class="sub">Aquí verás los 10 reels con mejores resultados cuando haya publicaciones con métricas.</p>
+<p class="empty">Sin datos todavía. Publica un reel para empezar a medir.</p>
+</section>
+
+<section id="v-config" hidden>
+<h2>Configuración</h2>
+<p class="sub">Valores por defecto para cada generación.</p>
+<div class="box row">
+<label>Duración por defecto<select id="cfgDur"></select></label>
+<label>Reels por tanda<select id="cfgN"><option>5</option><option selected>10</option><option>15</option></select></label>
+<label>Subtítulos<select><option>Palabra por palabra</option><option>Frase completa</option><option>Sin subtítulos</option></select></label>
+</div>
+</section>
+
+<p class="note">Prototipo de interfaz: la generación es simulada. Falta conectar el servidor que descarga, transcribe, analiza y renderiza los videos, y las APIs de publicación.</p>
+</main>
+
+<script>
+const DURS=[["30","30 segundos"],["45","45 segundos"],["60","1 minuto"],["70","1 min 10 s"],["90","1 min 30 s"],["120","2 minutos"]];
+const clips=[];const timers={};
+const $=(s,r=document)=>r.querySelector(s);
+const opts=DURS.map(d=>`<option value="${d[0]}">${d[1]}</option>`).join("");
+$("#cfgDur").innerHTML=opts;
+
+document.querySelectorAll(".box[data-mode]").forEach(b=>{
+ const m=b.dataset.mode;
+ b.innerHTML=`<div class="row">
+ <label style="flex:1">Enlace de YouTube<input type="url" class="url" placeholder="https://www.youtube.com/watch?v=..."></label>
+ <label>Duración del clip<select class="dur">${opts}</select></label>
+ <button class="go">${m==="live"?"Iniciar generación en vivo":"Comenzar análisis"}</button></div>
+ <label class="ck"><input type="checkbox" class="rights"> Tengo autorización para reutilizar este contenido.</label>
+ <p class="msg" role="status"></p>
+ <div class="tl" aria-hidden="true"></div>
+ <p class="tlcap">Momentos detectados en el video</p>
+ <div class="grid"></div>`;
+ $(".go",b).onclick=()=>toggle(b,m);
+});
+
+function msg(b,t,err){const p=$(".msg",b);p.textContent=t;p.classList.toggle("err",!!err)}
+function toggle(b,m){
+ const btn=$(".go",b);
+ if(timers[m]){stop(b,m);return}
+ const u=$(".url",b).value.trim();
+ if(!/^https?:\/\/(www\.|m\.)?(youtube\.com|youtu\.be)\//.test(u)){msg(b,"Pega un enlace válido de YouTube.",1);return}
+ if(!$(".rights",b).checked){msg(b,"Confirma que tienes autorización para reutilizar el contenido.",1);return}
+ const dur=+$(".dur",b).value,n=+$("#cfgN").value;
+ btn.textContent=m==="live"?"Detener":"Analizando…";
+ if(m==="live")btn.classList.add("stop");else btn.disabled=true;
+ let batch=0;
+ const run=()=>{batch++;addBatch(b,dur,n,batch);
+  if(m==="video"){stop(b,m,"Listo: "+n+" reels generados.")}
+  else msg(b,"Tanda "+batch+" lista. Analizando el directo…")};
+ msg(b,m==="live"?"Escuchando el directo…":"Analizando el video…");
+ timers[m]=setTimeout(function loop(){run();if(m==="live"&&timers[m])timers[m]=setTimeout(loop,4000)},1800);
+}
+function stop(b,m,t){
+ clearTimeout(timers[m]);delete timers[m];
+ const btn=$(".go",b);btn.disabled=false;btn.classList.remove("stop");
+ btn.textContent=m==="live"?"Iniciar generación en vivo":"Comenzar análisis";
+ msg(b,t||"Generación detenida.");
+}
+function addBatch(b,dur,n,batch){
+ const tl=$(".tl",b);
+ for(let i=0;i<n;i++){
+  const start=Math.floor(Math.random()*3300)+30;
+  const c={start,dur,hue:Math.floor(Math.random()*360),score:60+Math.floor(Math.random()*38),batch};
+  clips.push(c);
+  const x=Math.random()*94;
+  tl.insertAdjacentHTML("beforeend",`<b style="left:${x}%;width:${Math.max(1.2,dur/40)}%"></b>`);
+ }
+ render();
+}
+const fmt=s=>String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
+function card(c,i){
+ return `<article class="clip"><div class="thumb" style="background:linear-gradient(160deg,hsl(${c.hue} 60% 38%),hsl(${(c.hue+50)%360} 55% 22%))">Momento en ${fmt(c.start)}</div>
+ <div class="meta"><span>${c.dur>=60?(c.dur/60).toFixed(c.dur%60?1:0).replace(".",",")+" min":c.dur+" s"} · 9:16</span>
+ <div class="bar" title="Potencial estimado"><i style="width:${c.score}%"></i></div><span>Potencial estimado: ${c.score}</span>
+ <button disabled title="Disponible cuando haya servidor">Descargar</button></div></article>`;
+}
+function render(){
+ const html=clips.map(card).join("");
+ document.querySelectorAll(".box[data-mode] .grid").forEach(g=>g.innerHTML=html);
+ $("#g-reels").innerHTML=html;
+ $("#e-reels").hidden=clips.length>0;
+}
+
+const NETS=["TikTok","YouTube Shorts","Instagram","Facebook"];
+$("#net").innerHTML=NETS.map(n=>`<div class="box"><strong>${n}</strong><span class="sub" style="margin:0">No conectada</span><button>Conectar cuenta</button></div>`).join("");
+document.querySelectorAll("#net .box").forEach(bx=>{const bt=$("button",bx),st=$("span",bx);
+ bt.onclick=()=>{const on=bt.classList.toggle("on");bt.textContent=on?"Desconectar":"Conectar cuenta";st.textContent=on?"Conectada (simulado)":"No conectada"}});
+
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{
+ document.querySelectorAll("nav button").forEach(x=>x.removeAttribute("aria-current"));
+ b.setAttribute("aria-current","page");
+ document.querySelectorAll("main section").forEach(s=>s.hidden=s.id!=="v-"+b.dataset.v);
+});
+</script>
+</body>
+</html>
